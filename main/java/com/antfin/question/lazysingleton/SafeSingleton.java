@@ -3,7 +3,7 @@ package com.antfin.question.lazysingleton;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SafeSingleton {
-    private   static SafeSingleton singleton;
+    private volatile  static SafeSingleton singleton;
     public static AtomicInteger count= new AtomicInteger(0);
     private SafeSingleton(){
         count.getAndIncrement();
