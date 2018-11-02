@@ -1,45 +1,48 @@
 package com.antfin.question.test;
 
 import com.antfin.question.spinlock.Ticket;
+import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class SellTicketTest {
 
     @Test
-    public void sellTicketsTests() throws ExecutionException, InterruptedException {
+    public void spinLockSellTest() throws ExecutionException, InterruptedException {
+        final int total= 1000;
         for(int i=0 ;i<20;i++){
-            sell();
-        }
-    }
-
-
-    private void sell() throws ExecutionException, InterruptedException {
-        final Ticket ticket =new Ticket();
-        ExecutorService executorService = Executors.newFixedThreadPool(32);
-        List<Future> futures =new ArrayList<>();
-        for(int i=0;i<1000;i++){
-            Future<?> submit = executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-//                    ticket.sell();
-                    ticket.sellSynchronized();
-
-                }
+            Ticket ticket =new Ticket(total);
+            ThreadUtils.runUtilFinish(32,total,()->{
+                ticket.spinLockSell();
             });
-            futures.add(submit);
+            Assert.assertEquals(0,ticket.getTotal());
         }
-        for (Future future : futures) {
-            future.get();
-        }
-        if(ticket.getTotal()>0)
-          System.out.println("剩余票数:"+ticket.getTotal());
-        executorService.shutdown();
     }
+
+    @Test
+    public void synchronizedSellTest() throws ExecutionException, InterruptedException {
+        final int total= 1000;
+        for(int i=0 ;i<20;i++){
+            Ticket ticket =new Ticket(total);
+            ThreadUtils.runUtilFinish(32,total,()->{
+                ticket.synchronizedSell();
+            });
+            Assert.assertEquals(0,ticket.getTotal());
+        }
+    }
+
+    @Test
+    public void unsafeSellTest() throws ExecutionException, InterruptedException {
+        final int total= 1000;
+        for(int i=0 ;i<20;i++){
+            Ticket ticket =new Ticket(total);
+            ThreadUtils.runUtilFinish(32,total,()->{
+                ticket.unsafeSell();
+            });
+            Assert.assertEquals(0,ticket.getTotal());
+        }
+    }
+
+
 }

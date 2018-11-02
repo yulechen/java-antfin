@@ -1,12 +1,15 @@
 package com.antfin.question.spinlock;
 
 public class Ticket {
-
     private int total=1000;
 
-   private SpinLock lock = new SpinLock();
+    public Ticket(int total) {
+        this.total = total;
+    }
 
-    public  int  sell(){
+    private SpinLock lock = new SpinLock();
+
+    public  int  spinLockSell(){
         try {
             lock.lock();
             total=total-1;
@@ -17,10 +20,16 @@ public class Ticket {
 
     }
 
-    public  synchronized  int  sellSynchronized(){
-            lock.lock();
+    public  synchronized int synchronizedSell(){
             total=total-1;
             return total;
+    }
+
+
+    public  int  unsafeSell(){
+            total=total-1;
+            return total;
+
     }
 
     public int getTotal() {
