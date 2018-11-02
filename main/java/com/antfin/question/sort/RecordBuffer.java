@@ -25,4 +25,8 @@ public class RecordBuffer {
     public void setDone() {
         this.done.set(true);
     }
+
+    public boolean isEmpty(){
+        return queue.isEmpty();
+    }
 }

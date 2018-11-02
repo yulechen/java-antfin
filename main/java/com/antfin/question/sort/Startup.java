@@ -44,7 +44,7 @@ public class Startup {
             // 4个线程排序
             List<Future> futures =new ArrayList<>();
             ExecutorService consumerExcutors = Executors.newFixedThreadPool(4);
-            while(!pool.isDone()){
+            for (int i = 0; i <4 ; i++) {
                 Consumer consumer =new Consumer();
                 consumer.setPool(pool);
                 consumer.setSortMap(sortMap);
@@ -52,6 +52,7 @@ public class Startup {
                     consumer.consume();
                 });
                 futures.add(submit);
+
             }
 
             // 所有线程完成读操作
@@ -87,6 +88,7 @@ public class Startup {
              Thread.sleep(1000);
          }
          main.sortMap.forEach((k,v)->{
+           //  System.out.println(k+":"+v.size());
              System.out.println(k+"      :"+v.stream().min( (v1,v2)->{
                  if(v1.getQuota()-v2.getQuota()>0){
                      return 1;

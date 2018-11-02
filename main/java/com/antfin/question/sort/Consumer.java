@@ -27,17 +27,18 @@ public class Consumer {
     }
 
 
-    public void consume(){
+    public   void consume(){
+        while(!pool.isDone() || !pool.isEmpty()) {
             Record object = pool.getObject();
-            if(null != object){
-                List<Record> sortObjects = sortMap.get(object.getId());
-                if(null == sortObjects){
-                    sortObjects =new ArrayList<>();
+            if (null != object) {
+                List<Record> sortObjects = sortMap.get(object.getGroupId());
+                if (null == sortObjects) {
+                    sortObjects = new ArrayList<>();
                 }
                 sortObjects.add(object);
-                sortMap.put(object.getGroupId(),sortObjects);
+                sortMap.put(object.getGroupId(), sortObjects);
             }
-
+        }
     }
 
 }

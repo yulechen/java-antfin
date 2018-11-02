@@ -19,6 +19,7 @@ public class Producer {
         if(null == file){
             return;
         }
+
         List<String> stringList = FileUtil.readLines(file, "utf-8");
         for (String line : stringList) {
             String[] strArray = line.split(",");
@@ -28,6 +29,7 @@ public class Producer {
             so.setGroupId(strArray[1]);
 
             so.setQuota(Float.parseFloat(strArray[2]));
+           // System.out.println("p:"+so);
             pool.addObject(so);
         }
 
